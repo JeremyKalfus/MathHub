@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Training Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Math Training Hub</h1>
+            <p>Master mathematics from basic arithmetic to advanced calculus</p>
+        </header>
+
+        <nav class="module-nav">
+            <div class="nav-grid">
+                <div class="module-card" data-module="arithmetic">
+                    <div class="module-icon">+</div>
+                    <h3>Arithmetic</h3>
+                    <p>Addition, subtraction, multiplication, division</p>
+                </div>
+                
+                <div class="module-card" data-module="unit-circle">
+                    <div class="module-icon">○</div>
+                    <h3>Unit Circle</h3>
+                    <p>Trigonometry and angle relationships</p>
+                </div>
+                
+                <div class="module-card" data-module="factoring">
+                    <div class="module-icon">#</div>
+                    <h3>Factoring</h3>
+                    <p>Polynomial factoring techniques</p>
+                </div>
+                
+                <div class="module-card" data-module="derivatives">
+                    <div class="module-icon">d/dx</div>
+                    <h3>Derivatives</h3>
+                    <p>Calculus differentiation practice</p>
+                </div>
+            </div>
+        </nav>
+
+        <div class="progress-section">
+            <h3>Your Progress</h3>
+            <div class="progress-stats">
+                <div class="stat">
+                    <span class="stat-number" id="total-questions">0</span>
+                    <span class="stat-label">Questions Answered</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="correct-answers">0</span>
+                    <span class="stat-label">Correct Answers</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" id="accuracy">0%</span>
+                    <span class="stat-label">Accuracy</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Module Content Areas -->
+    <div id="arithmetic-module" class="module-content hidden">
+        <div class="module-header">
+            <button class="back-btn">← Back to Modules</button>
+            <h2>Arithmetic Practice</h2>
+        </div>
+        <div class="practice-area">
+            <div class="question-container">
+                <div class="question" id="arithmetic-question"></div>
+                <input type="number" id="arithmetic-answer" placeholder="Your answer">
+                <button id="check-arithmetic">Check Answer</button>
+            </div>
+            <div class="feedback" id="arithmetic-feedback"></div>
+            <div class="controls">
+                <button id="new-arithmetic">New Question</button>
+                <div class="difficulty-selector">
+                    <label>Difficulty:</label>
+                    <select id="arithmetic-difficulty">
+                        <option value="easy">Easy (1-10)</option>
+                        <option value="medium">Medium (1-50)</option>
+                        <option value="hard">Hard (1-100)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="unit-circle-module" class="module-content hidden">
+        <div class="module-header">
+            <button class="back-btn">← Back to Modules</button>
+            <h2>Unit Circle Practice</h2>
+        </div>
+        <div class="practice-area">
+            <div class="unit-circle-container">
+                <canvas id="unit-circle-canvas" width="400" height="400"></canvas>
+            </div>
+            <div class="question-container">
+                <div class="question" id="unit-circle-question"></div>
+                <div class="answer-options" id="unit-circle-options"></div>
+                <button id="check-unit-circle">Check Answer</button>
+            </div>
+            <div class="feedback" id="unit-circle-feedback"></div>
+            <div class="controls">
+                <button id="new-unit-circle">New Question</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="factoring-module" class="module-content hidden">
+        <div class="module-header">
+            <button class="back-btn">← Back to Modules</button>
+            <h2>Factoring Practice</h2>
+        </div>
+        <div class="practice-area">
+            <div class="question-container">
+                <div class="question" id="factoring-question"></div>
+                <input type="text" id="factoring-answer" placeholder="Factor the expression (e.g., (x+2)(x+3))">
+                <button id="check-factoring">Check Answer</button>
+            </div>
+            <div class="feedback" id="factoring-feedback"></div>
+            <div class="controls">
+                <button id="new-factoring">New Question</button>
+                <div class="difficulty-selector">
+                    <label>Type:</label>
+                    <select id="factoring-type">
+                        <option value="quadratic">Quadratic</option>
+                        <option value="difference-squares">Difference of Squares</option>
+                        <option value="perfect-square">Perfect Square</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="derivatives-module" class="module-content hidden">
+        <div class="module-header">
+            <button class="back-btn">← Back to Modules</button>
+            <h2>Derivatives Practice</h2>
+        </div>
+        <div class="practice-area">
+            <div class="question-container">
+                <div class="question" id="derivatives-question"></div>
+                <input type="text" id="derivatives-answer" placeholder="Enter the derivative">
+                <button id="check-derivatives">Check Answer</button>
+            </div>
+            <div class="feedback" id="derivatives-feedback"></div>
+            <div class="controls">
+                <button id="new-derivatives">New Question</button>
+                <div class="difficulty-selector">
+                    <label>Type:</label>
+                    <select id="derivatives-type">
+                        <option value="power">Power Rule</option>
+                        <option value="product">Product Rule</option>
+                        <option value="chain">Chain Rule</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
