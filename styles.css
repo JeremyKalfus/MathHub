@@ -300,22 +300,27 @@ button:active {
 }
 
 .answer-options {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 20px;
+    justify-content: center;
+    align-items: center;
 }
 
 .answer-option {
     background: #2d2d2d;
     border: 2px solid #404040;
     border-radius: 8px;
-    padding: 15px;
+    padding: 8px 12px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
     font-weight: 500;
     color: #ffffff;
+    min-width: fit-content;
+    width: auto;
+    display: inline-block;
 }
 
 .answer-option:hover {
@@ -332,6 +337,8 @@ button:active {
 /* MathJax styling */
 .answer-option mjx-container {
     color: inherit;
+    font-size: 1.1em;
+    line-height: 1.2;
 }
 
 .answer-option.selected mjx-container {
@@ -340,6 +347,7 @@ button:active {
 
 .feedback mjx-container {
     color: inherit;
+    font-size: 1.1em;
 }
 
 .feedback.correct mjx-container {
@@ -348,6 +356,19 @@ button:active {
 
 .feedback.incorrect mjx-container {
     color: #721c24;
+}
+
+/* Better math rendering */
+mjx-container {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+}
+
+mjx-math {
+    font-size: inherit;
+    line-height: inherit;
 }
 
 /* Responsive Design */
