@@ -1,123 +1,128 @@
-# 🧮 Math Training Hub
+# Math Training Hub
 
 A comprehensive web-based math training platform that helps students master mathematics from basic arithmetic to advanced calculus. Perfect for self-study, homework practice, and skill building.
 
-## Features
+## What It Does
 
-### 📚 Math Modules
+This website provides interactive math practice across four key areas:
 
-1. **Arithmetic Practice**
-   - Addition, subtraction, multiplication, and division
-   - Three difficulty levels (Easy: 1-10, Medium: 1-50, Hard: 1-100)
-   - Instant feedback and scoring
+### Arithmetic Practice
+- **Basic Operations**: Addition, subtraction, multiplication, and division
+- **Difficulty Levels**: Easy (1-10), Medium (1-50), Hard (1-100)
+- **Instant Feedback**: Get immediate results and explanations
+- **Progress Tracking**: Monitor your improvement over time
 
-2. **Unit Circle Trigonometry**
-   - Interactive unit circle visualization
-   - Sine, cosine, and tangent practice
-   - Multiple choice questions with visual aids
-   - Common angle values (0°, 30°, 45°, 60°, 90°, etc.)
+### Unit Circle Trigonometry
+- **Interactive Visualization**: See angles and relationships on a unit circle
+- **Trig Functions**: Practice sine, cosine, and tangent values
+- **Common Angles**: Work with 0°, 30°, 45°, 60°, 90°, 120°, 135°, 150°, 180°, etc.
+- **Multiple Choice**: Select from multiple answer options
 
-3. **Polynomial Factoring**
-   - Quadratic factoring
-   - Difference of squares
-   - Perfect square trinomials
-   - Step-by-step guidance
+### Polynomial Factoring
+- **Quadratic Factoring**: Factor expressions like x² + 5x + 6
+- **Difference of Squares**: Factor expressions like x² - 9
+- **Perfect Squares**: Factor expressions like x² + 6x + 9
+- **Flexible Input**: Type your answers in standard mathematical notation
 
-4. **Derivatives Practice**
-   - Power rule applications
-   - Product rule problems
-   - Chain rule exercises
-   - Various complexity levels
+### Derivatives Practice
+- **Power Rule**: Find derivatives of polynomial functions
+- **Product Rule**: Differentiate products of functions
+- **Chain Rule**: Handle composite functions
+- **Smart Notation**: x¹ is automatically recognized as x
 
-### 🎯 Progress Tracking
-- Real-time accuracy tracking
-- Total questions answered
-- Correct answers counter
-- Percentage accuracy display
+## How to Use
 
-### 🎨 Modern UI/UX
-- Responsive design for all devices
-- Beautiful gradient backgrounds
-- Smooth animations and transitions
-- Intuitive navigation
-- Clean, modern interface
+### Getting Started
+1. **Open the website** in your web browser
+2. **Choose a math module** from the main page
+3. **Start practicing** with automatically generated questions
+4. **Track your progress** with real-time statistics
 
-## 🚀 Getting Started
+### Navigation
+- **Main Menu**: Click any module card to start practicing
+- **Back Button**: Use "← Back to Modules" to return to the main menu
+- **New Questions**: Click "New Question" for fresh problems
+- **Difficulty Settings**: Adjust challenge level in the controls
 
-### Local Development
+### Progress Tracking
+- **Questions Answered**: Total number of problems attempted
+- **Correct Answers**: Number of correct responses
+- **Accuracy**: Percentage of correct answers
+- **Real-time Updates**: Statistics update after each question
 
-1. Clone or download this repository
-2. Open `index.html` in your web browser
-3. Start practicing math!
+## Running the Website
 
-### GitHub Pages Deployment
+### Option 1: Use the Live Website
+The easiest way is to use the live version:
+- **Visit**: https://JezzerK.github.io/MathHub
+- **No setup required** - just open in your browser and start practicing!
 
-1. Fork this repository to your GitHub account
-2. Go to your repository settings
-3. Scroll down to "Pages" section
-4. Select "Deploy from a branch"
-5. Choose "main" branch and "/ (root)" folder
-6. Click "Save"
-7. Your site will be available at `https://yourusername.github.io/math-training-hub`
+### Option 2: Run Locally
+If you want to run it on your own computer:
 
-## 📱 Usage
+1. **Download the files** from this repository
+2. **Open `index.html`** in any web browser (Chrome, Firefox, Safari, Edge)
+3. **Start practicing** - no installation needed!
 
-1. **Choose a Module**: Click on any of the four math modules from the main page
-2. **Practice**: Answer questions and get instant feedback
-3. **Track Progress**: Monitor your accuracy and improvement over time
-4. **Adjust Difficulty**: Use the difficulty selectors to match your skill level
-5. **Get New Questions**: Click "New Question" to generate fresh problems
+### Option 3: Deploy Your Own Version
+To create your own version on GitHub Pages:
 
-## 🛠️ Technical Details
+1. **Fork this repository** to your GitHub account
+2. **Go to Settings** in your forked repository
+3. **Scroll to "Pages"** in the left sidebar
+4. **Source**: "Deploy from a branch"
+5. **Branch**: "main", **Folder**: "/ (root)"
+6. **Save** - your site will be live at `https://yourusername.github.io/MathHub`
 
-- **Frontend**: Pure HTML5, CSS3, and JavaScript (ES6+)
-- **No Dependencies**: Runs entirely in the browser
-- **Responsive**: Works on desktop, tablet, and mobile devices
-- **GitHub Pages Ready**: Configured for easy deployment
+## Technical Details
 
-## 📁 Project Structure
+- **Pure Web Technologies**: HTML5, CSS3, JavaScript (no frameworks needed)
+- **No Installation**: Runs directly in any modern web browser
+- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Dark Mode**: Easy on the eyes for extended study sessions
+- **Offline Capable**: Works without internet connection once loaded
+
+## File Structure
 
 ```
-math-training-hub/
-├── index.html          # Main HTML file
-├── styles.css          # CSS styling
-├── script.js           # JavaScript functionality
-└── README.md           # This file
+MathHub/
+├── index.html          # Main website file
+├── styles.css          # Dark mode styling and layout
+├── script.js           # All math functionality and interactions
+├── README.md           # This documentation
+└── DEPLOYMENT.md       # Detailed deployment instructions
 ```
 
-## 🎓 Educational Benefits
+## Educational Benefits
 
-- **Self-Paced Learning**: Students can practice at their own speed
-- **Immediate Feedback**: Instant correction helps learning
-- **Visual Learning**: Unit circle with interactive graphics
+- **Self-Paced Learning**: Practice at your own speed
+- **Immediate Feedback**: Learn from mistakes instantly
+- **Visual Learning**: Interactive unit circle helps understand trigonometry
 - **Progressive Difficulty**: Build skills from basic to advanced
-- **Progress Tracking**: Monitor improvement over time
+- **Progress Tracking**: See improvement over time
+- **No Registration**: Start practicing immediately
 
-## 🔧 Customization
+## Customization
 
-The code is well-commented and modular, making it easy to:
-- Add new math topics
+The code is well-organized and commented, making it easy to:
+- Add new math topics (algebra, geometry, statistics)
 - Modify difficulty levels
-- Change the visual design
+- Change the color scheme or design
 - Add new question types
 - Integrate with learning management systems
 
-## 📄 License
+## Contributing
 
-This project is open source and available under the MIT License.
+Found a bug or want to add a feature? Contributions are welcome!
+- Report issues on GitHub
+- Suggest new math modules
+- Submit improvements
+- Help with documentation
 
-## 🤝 Contributing
+## Support
 
-Contributions are welcome! Feel free to:
-- Report bugs
-- Suggest new features
-- Submit pull requests
-- Improve documentation
-
-## 📞 Support
-
-If you encounter any issues or have questions, please open an issue in the GitHub repository.
+Having trouble? Check the [Deployment Guide](DEPLOYMENT.md) for detailed setup instructions, or open an issue on GitHub.
 
 ---
 
-**Happy Learning! 🎉**
+**Start practicing math today!** 🚀
