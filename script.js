@@ -705,6 +705,12 @@ function checkFactoringAnswer() {
         s = s.replace(/\+\-/g, '-').replace(/-\+/g, '-').replace(/--/g, '+');
         // Normalize multiplication symbol variants
         s = s.replace(/×/g, '*');
+        // Expand squared parenthetical factors: (expr)^2 or (expr)² -> (expr)(expr)
+        // Run repeatedly in case there are multiple squared factors
+        const expandSquared = (input) => input.replace(/\(([^()]+)\)\^2/g, '($1)($1)')
+                                             .replace(/\(([^()]+)\)²/g, '($1)($1)');
+        let prev;
+        do { prev = s; s = expandSquared(s); } while (s !== prev);
         // Sort factors so order does not matter
         const factors = s.match(/\([^()]+\)/g);
         if (factors && factors.length >= 1) {
@@ -742,7 +748,7 @@ function generateDerivativesQuestion() {
         case 'power':
             const power = Math.floor(Math.random() * 5) + 2;
             const coeff = Math.floor(Math.random() * 5) + 1;
-            question = `Find the derivative: ${coeff}x^${power}`;
+            question = `Find the derivative: ${formatSuperscript(`${coeff}x^${power}`)}`;
             if (power - 1 === 1) {
                 answer = `${coeff * power}x`;
             } else {
@@ -753,20 +759,20 @@ function generateDerivativesQuestion() {
         case 'product':
             const a = Math.floor(Math.random() * 3) + 1;
             const b = Math.floor(Math.random() * 3) + 1;
-            question = `Find the derivative: (${a}x + 1)(${b}x + 2)`;
+            question = `Find the derivative: ${formatSuperscript(`(${a}x + 1)(${b}x + 2)`)}`;
             answer = `${a * b * 2}x + ${a * 2 + b}`;
             break;
             
         case 'chain':
             const innerCoeff = Math.floor(Math.random() * 3) + 1;
             const outerPower = Math.floor(Math.random() * 3) + 2;
-            question = `Find the derivative: (${innerCoeff}x + 1)^${outerPower}`;
+            question = `Find the derivative: ${formatSuperscript(`(${innerCoeff}x + 1)^${outerPower}`)}`;
             answer = `${outerPower * innerCoeff}(${innerCoeff}x + 1)^${outerPower - 1}`;
             break;
     }
     
     state.currentQuestion = { question, answer, type: 'derivatives' };
-    document.getElementById('derivatives-question').textContent = question;
+    document.getElementById('derivatives-question').innerHTML = question;
     document.getElementById('derivatives-answer').value = '';
     document.getElementById('derivatives-feedback').textContent = '';
     document.getElementById('derivatives-feedback').className = 'feedback';
@@ -787,7 +793,7 @@ function checkDerivativesAnswer() {
     
     if (normalizeAnswer(userAnswer) === normalizeAnswer(state.currentQuestion.answer)) {
         state.correctAnswers++;
-        feedback.textContent = 'Correct!';
+        feedback.innerHTML = 'Correct!';
         feedback.className = 'feedback correct';
         
         // Auto-advance to next question after 0.5 seconds
@@ -795,11 +801,26 @@ function checkDerivativesAnswer() {
             generateDerivativesQuestion();
         }, 500);
     } else {
-        feedback.textContent = `Incorrect. The answer is ${state.currentQuestion.answer}.`;
+        // Render answer with superscripts for display
+        const formatted = formatSuperscript(state.currentQuestion.answer);
+        feedback.innerHTML = `Incorrect. The answer is ${formatted}.`;
         feedback.className = 'feedback incorrect';
     }
     
     updateProgress();
+}
+
+// Utility: convert caret exponents like x^2 and (...)^3 into superscripts for display
+function formatSuperscript(expr) {
+    if (!expr) return '';
+    let html = expr
+        // Replace ^number with superscript number
+        .replace(/\^(\d+)/g, (_, p1) => `<sup>${p1}</sup>`)
+        // Replace ^(digits) too if present
+        .replace(/\^\((\d+)\)/g, (_, p1) => `<sup>${p1}</sup>`)
+        // Keep parentheses and operators as-is
+        ;
+    return html;
 }
 
 // Event Listeners
