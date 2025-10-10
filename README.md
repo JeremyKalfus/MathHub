@@ -1,4 +1,4 @@
-# Math Training Hub
+# MathHub
 
 A comprehensive web-based math training platform that helps students master mathematics from basic arithmetic to advanced calculus. Perfect for self-study, homework practice, and skill building.
 
