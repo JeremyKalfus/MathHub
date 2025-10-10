@@ -200,7 +200,13 @@ function generateUnitCircleQuestion() {
     const trigValues = getExactTrigValues(radians, questionType);
     
     if (answerFormat === 'fractions') {
-        answer = trigValues.fraction;
+        // If fraction is a number (decimal), convert it to a fraction string
+        if (typeof trigValues.fraction === 'number') {
+            // Convert decimal to fraction string for display
+            answer = trigValues.fraction.toString();
+        } else {
+            answer = trigValues.fraction;
+        }
     } else {
         answer = Math.round(trigValues.decimal * 1000) / 1000;
     }
@@ -281,7 +287,7 @@ function getExactSinValue(angle) {
         315: '-√2/2',
         330: '-1/2'
     };
-    return sinValues[angle] || '0';
+    return sinValues[angle] || Math.round(Math.sin(angle * Math.PI / 180) * 1000) / 1000;
 }
 
 // Exact cos values for common angles
@@ -304,7 +310,7 @@ function getExactCosValue(angle) {
         315: '√2/2',
         330: '√3/2'
     };
-    return cosValues[angle] || '0';
+    return cosValues[angle] || Math.round(Math.cos(angle * Math.PI / 180) * 1000) / 1000;
 }
 
 // Exact tan values for common angles
@@ -327,7 +333,7 @@ function getExactTanValue(angle) {
         315: '-1',
         330: '-√3/3'
     };
-    return tanValues[angle] || '0';
+    return tanValues[angle] || Math.round(Math.tan(angle * Math.PI / 180) * 1000) / 1000;
 }
 
 // Format radians for display
