@@ -17,6 +17,58 @@ function updateProgress() {
     document.getElementById('accuracy').textContent = accuracy + '%';
 }
 
+// Cookie helpers and stats persistence
+function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "; expires=" + date.toUTCString();
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + "; path=/";
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i].trim();
+        if (c.indexOf(nameEQ) === 0) {
+            return decodeURIComponent(c.substring(nameEQ.length));
+        }
+    }
+    return null;
+}
+
+function saveStatsToCookies() {
+    // Persist to cookies (for HTTPS hosting) and localStorage (for file:// testing)
+    const tq = String(state.totalQuestions);
+    const ca = String(state.correctAnswers);
+    setCookie('mth_totalQuestions', tq, 365);
+    setCookie('mth_correctAnswers', ca, 365);
+    try {
+        localStorage.setItem('mth_totalQuestions', tq);
+        localStorage.setItem('mth_correctAnswers', ca);
+    } catch (e) {
+        // ignore storage errors
+    }
+}
+
+function loadStatsFromCookies() {
+    let tq = parseInt(getCookie('mth_totalQuestions'));
+    let ca = parseInt(getCookie('mth_correctAnswers'));
+    // If cookies are unavailable (common on file://), fall back to localStorage
+    if ((isNaN(tq) || tq < 0) || (isNaN(ca) || ca < 0)) {
+        try {
+            const lsTq = parseInt(localStorage.getItem('mth_totalQuestions'));
+            const lsCa = parseInt(localStorage.getItem('mth_correctAnswers'));
+            if (!isNaN(lsTq) && lsTq >= 0) tq = lsTq;
+            if (!isNaN(lsCa) && lsCa >= 0) ca = lsCa;
+        } catch (e) {
+            // ignore storage errors
+        }
+    }
+    if (!isNaN(tq) && tq >= 0) state.totalQuestions = tq;
+    if (!isNaN(ca) && ca >= 0) state.correctAnswers = ca;
+}
+
 // Navigation functions
 function showModule(moduleName) {
     // Hide all modules
@@ -170,6 +222,7 @@ function checkArithmeticAnswer() {
     }
     
     updateProgress();
+    saveStatsToCookies();
 }
 
 // Unit Circle Module
@@ -599,6 +652,7 @@ function checkUnitCircleAnswer() {
     }
     
     updateProgress();
+    saveStatsToCookies();
 }
 
 // Factoring Module
@@ -741,6 +795,7 @@ function checkFactoringAnswer() {
     }
     
     updateProgress();
+    saveStatsToCookies();
 }
 
 // Derivatives Module
@@ -812,6 +867,7 @@ function checkDerivativesAnswer() {
     }
     
     updateProgress();
+    saveStatsToCookies();
 }
 
 // Utility: convert caret exponents like x^2 and (...)^3 into superscripts for display
@@ -829,6 +885,9 @@ function formatSuperscript(expr) {
 
 // Event Listeners
 document.addEventListener('DOMContentLoaded', function() {
+    // Load saved stats first
+    loadStatsFromCookies();
+    updateProgress();
     // Module navigation
     document.querySelectorAll('.module-card').forEach(card => {
         card.addEventListener('click', function() {
@@ -894,6 +953,5 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') checkDerivativesAnswer();
     });
     
-    // Initialize progress
-    updateProgress();
+    // Progress was initialized above from cookies
 });
