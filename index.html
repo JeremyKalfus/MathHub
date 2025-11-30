@@ -128,6 +128,18 @@
                         <option value="decimals">Decimals (0.866)</option>
                     </select>
                 </div>
+                <div class="difficulty-selector angle-range-control">
+                    <div class="angle-range-header">
+                        <label for="unit-angle-min-input">Angle Range:</label>
+                        <span id="unit-angle-range-display">0° → 360° (0 → 2π)</span>
+                    </div>
+                    <div class="angle-range-inputs">
+                        <input type="text" id="unit-angle-min-input" value="0" aria-label="Minimum angle">
+                        <span>to</span>
+                        <input type="text" id="unit-angle-max-input" value="360" aria-label="Maximum angle">
+                    </div>
+                    <small class="angle-range-hint">Match the selected angle format (degrees or radians).</small>
+                </div>
                 <div class="canvas-controls">
                     <label>
                         <input type="checkbox" id="show-unit-circle" checked>

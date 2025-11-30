@@ -6,8 +6,13 @@ const state = {
     correctAnswers: 0,
     currentModule: null,
     currentQuestion: null,
-    selectedAnswer: null
+    selectedAnswer: null,
+    unitCircleRange: { min: 0, max: 360 },
+    unitCircleAngleFormat: 'degrees'
 };
+
+const UNIT_CIRCLE_DEGREES = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
+const UNIT_CIRCLE_MAX_BOUNDARY_DEGREES = 360;
 
 // Progress tracking
 function updateProgress() {
@@ -226,28 +231,120 @@ function checkArithmeticAnswer() {
 }
 
 // Unit Circle Module
+function getNearestUnitCircleAngle(value) {
+    if (!UNIT_CIRCLE_DEGREES.length) return null;
+    return UNIT_CIRCLE_DEGREES.reduce((closest, angle) => {
+        const currentDiff = Math.abs(angle - value);
+        const bestDiff = Math.abs(closest - value);
+        if (currentDiff < bestDiff) return angle;
+        if (currentDiff === bestDiff) return Math.min(closest, angle);
+        return closest;
+    }, UNIT_CIRCLE_DEGREES[0]);
+}
+
+function formatAngleLabel(degrees) {
+    const radiansLabel = formatRadians(degrees * Math.PI / 180);
+    if (!radiansLabel) return `${degrees}°`;
+    if (radiansLabel.includes('π') || radiansLabel === '0' || radiansLabel === '2π') {
+        return `${degrees}° (${radiansLabel})`;
+    }
+    return `${degrees}° (${radiansLabel})`;
+}
+
+function parseAngleInputValue(value, format) {
+    if (format === 'degrees') {
+        const parsed = parseFloat(value);
+        return isFinite(parsed) ? parsed : NaN;
+    }
+    if (typeof value !== 'string') return NaN;
+    const cleaned = value.replace(/\s+/g, '').toLowerCase().replace(/π/g, 'pi');
+    if (!cleaned) return NaN;
+    if (/[^0-9+\-*/().pi]/.test(cleaned)) {
+        const numeric = parseFloat(cleaned);
+        return isFinite(numeric) ? numeric * (180 / Math.PI) : NaN;
+    }
+    const expr = cleaned.replace(/pi/g, 'Math.PI');
+    try {
+        const radians = Function('"use strict";return (' + expr + ');')();
+        return typeof radians === 'number' && isFinite(radians) ? radians * (180 / Math.PI) : NaN;
+    } catch (err) {
+        return NaN;
+    }
+}
+
+function formatDegreesForInput(degrees, format) {
+    const clamped = Math.max(0, Math.min(degrees, UNIT_CIRCLE_MAX_BOUNDARY_DEGREES));
+    if (format === 'radians') {
+        return formatRadians(clamped * Math.PI / 180);
+    }
+    const rounded = Math.round(clamped * 1000) / 1000;
+    return Number.isInteger(rounded) ? String(rounded) : String(rounded);
+}
+
+function setAngleRangeInputsFromDegrees(minDeg, maxDeg, format) {
+    const minInput = document.getElementById('unit-angle-min-input');
+    const maxInput = document.getElementById('unit-angle-max-input');
+    if (minInput) minInput.value = formatDegreesForInput(minDeg, format);
+    if (maxInput) maxInput.value = formatDegreesForInput(maxDeg, format);
+}
+
+function updateAngleRangeDisplay() {
+    const display = document.getElementById('unit-angle-range-display');
+    if (!display) return;
+    const { minAngle, maxAngle } = getUnitCircleRangeBounds();
+    display.textContent = `${formatAngleLabel(minAngle)} → ${formatAngleLabel(maxAngle)}`;
+}
+
+function getUnitCircleRangeBounds(forceFormat) {
+    const format = forceFormat || document.getElementById('angle-format').value || 'degrees';
+    const minInput = document.getElementById('unit-angle-min-input');
+    const maxInput = document.getElementById('unit-angle-max-input');
+    let minAngle = parseAngleInputValue(minInput ? minInput.value : '', format);
+    let maxAngle = parseAngleInputValue(maxInput ? maxInput.value : '', format);
+    if (!isFinite(minAngle)) minAngle = 0;
+    if (!isFinite(maxAngle)) maxAngle = UNIT_CIRCLE_MAX_BOUNDARY_DEGREES;
+    minAngle = Math.max(0, Math.min(minAngle, UNIT_CIRCLE_MAX_BOUNDARY_DEGREES));
+    maxAngle = Math.max(0, Math.min(maxAngle, UNIT_CIRCLE_MAX_BOUNDARY_DEGREES));
+    if (minAngle > maxAngle) {
+        [minAngle, maxAngle] = [maxAngle, minAngle];
+        setAngleRangeInputsFromDegrees(minAngle, maxAngle, format);
+    }
+    state.unitCircleRange = { min: minAngle, max: maxAngle };
+    setAngleRangeInputsFromDegrees(minAngle, maxAngle, format);
+    return { minAngle, maxAngle };
+}
+
+function getUnitCircleAnglesWithinRange() {
+    const { minAngle, maxAngle } = getUnitCircleRangeBounds();
+    let withinRange = UNIT_CIRCLE_DEGREES.filter(deg => deg >= minAngle && deg <= maxAngle);
+    if (!withinRange.length) {
+        const nearest = getNearestUnitCircleAngle(minAngle);
+        if (nearest !== null) {
+            const format = document.getElementById('angle-format').value || 'degrees';
+            state.unitCircleRange = { min: nearest, max: nearest };
+            setAngleRangeInputsFromDegrees(nearest, nearest, format);
+            withinRange = [nearest];
+            updateAngleRangeDisplay();
+        } else {
+            withinRange = UNIT_CIRCLE_DEGREES.slice();
+        }
+    }
+    return withinRange;
+}
+
 function generateUnitCircleQuestion() {
     const angleFormat = document.getElementById('angle-format').value;
     const answerFormat = document.getElementById('answer-format').value;
     
-    // Define angles in both degrees and radians
-    const degreeAngles = [0, 30, 45, 60, 90, 120, 135, 150, 180, 210, 225, 240, 270, 300, 315, 330];
-    const radianAngles = [0, Math.PI/6, Math.PI/4, Math.PI/3, Math.PI/2, 2*Math.PI/3, 3*Math.PI/4, 5*Math.PI/6, Math.PI, 7*Math.PI/6, 5*Math.PI/4, 4*Math.PI/3, 3*Math.PI/2, 5*Math.PI/3, 7*Math.PI/4, 11*Math.PI/6];
-    
     const questionTypes = ['sin', 'cos', 'tan'];
     const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
     
-    let angle, angleDisplay, answer, question;
+    const anglesPool = getUnitCircleAnglesWithinRange();
+    const angleDegrees = anglesPool[Math.floor(Math.random() * anglesPool.length)];
+    const radians = angleDegrees * Math.PI / 180;
+    const angleDisplay = angleFormat === 'degrees' ? `${angleDegrees}°` : formatRadians(radians);
     
-    if (angleFormat === 'degrees') {
-        angle = degreeAngles[Math.floor(Math.random() * degreeAngles.length)];
-        angleDisplay = `${angle}°`;
-    } else {
-        angle = radianAngles[Math.floor(Math.random() * radianAngles.length)];
-        angleDisplay = formatRadians(angle);
-    }
-    
-    const radians = angleFormat === 'degrees' ? angle * Math.PI / 180 : angle;
+    let answer, question;
     
     // Get exact fraction values
     const trigValues = getExactTrigValues(radians, questionType);
@@ -270,7 +367,7 @@ function generateUnitCircleQuestion() {
         question, 
         answer, 
         type: 'unit-circle', 
-        angle: angleFormat === 'degrees' ? angle : angle * 180 / Math.PI, 
+        angle: angleDegrees, 
         questionType,
         angleFormat,
         answerFormat,
@@ -287,7 +384,6 @@ function generateUnitCircleQuestion() {
     if (showCircle) {
         // Use setTimeout to ensure the canvas is ready
         setTimeout(() => {
-            const angleDegrees = angleFormat === 'degrees' ? angle : angle * 180 / Math.PI;
             drawUnitCircle(angleDegrees, angleFormat);
         }, 10);
     } else {
@@ -411,7 +507,8 @@ function formatRadians(radians) {
         270: '3π/2',
         300: '5π/3',
         315: '7π/4',
-        330: '11π/6'
+        330: '11π/6',
+        360: '2π'
     };
     return degreeToPi[degrees] || `${radians.toFixed(3)}`;
 }
@@ -837,20 +934,69 @@ function generateDerivativesQuestion() {
     document.getElementById('derivatives-feedback').className = 'feedback';
 }
 
+function sanitizeForDerivativeEval(expr) {
+    if (!expr) return null;
+    let sanitized = expr.replace(/\s+/g, '')
+                        .toLowerCase()
+                        .replace(/×/g, '*')
+                        .replace(/÷/g, '/');
+    if (/[^0-9x+\-*/().^]/.test(sanitized)) {
+        return null;
+    }
+    sanitized = sanitized.replace(/\^/g, '**');
+    sanitized = sanitized.replace(/(\d)(x)/g, '$1*$2')
+                         .replace(/(\d)(\()/g, '$1*$2')
+                         .replace(/(x)(\d)/g, '$1*$2')
+                         .replace(/(x)(\()/g, '$1*$2')
+                         .replace(/(\))([0-9x])/g, '$1*$2')
+                         .replace(/(\))(\()/g, '$1*$2');
+    return sanitized;
+}
+
+function derivativeExpressionsMatch(exprA, exprB) {
+    const sanitizedA = sanitizeForDerivativeEval(exprA);
+    const sanitizedB = sanitizeForDerivativeEval(exprB);
+    if (!sanitizedA || !sanitizedB) return false;
+    try {
+        const fnA = new Function('x', `return ${sanitizedA};`);
+        const fnB = new Function('x', `return ${sanitizedB};`);
+        const testValues = [-3, -1, 0, 1, 2];
+        for (const x of testValues) {
+            const valA = Number(fnA(x));
+            const valB = Number(fnB(x));
+            if (!isFinite(valA) || !isFinite(valB) || Math.abs(valA - valB) > 1e-6) {
+                return false;
+            }
+        }
+        return true;
+    } catch (err) {
+        console.warn('Derivative expression comparison failed:', err);
+        return false;
+    }
+}
+
 function checkDerivativesAnswer() {
     const userAnswer = document.getElementById('derivatives-answer').value.trim();
     const feedback = document.getElementById('derivatives-feedback');
     
     state.totalQuestions++;
     
-    // Normalize answers for comparison - handle x^1 = x
+    // Normalize answers for comparison so algebraically equivalent strings match
     const normalizeAnswer = (ans) => {
-        return ans.replace(/\s/g, '').toLowerCase()
-                  .replace(/x\^1/g, 'x')
-                  .replace(/x\^1/g, 'x'); // Handle multiple occurrences
+        if (!ans) return '';
+        let normalized = ans.replace(/\s+/g, '').toLowerCase();
+        normalized = normalized
+            .replace(/([a-z])\^1(?![0-9/\.])/g, '$1')      // collapse variable^1 -> variable
+            .replace(/([\)\]\}])\^1(?![0-9/\.])/g, '$1')   // collapse (expr)^1 -> expr
+            .replace(/(^|[^0-9])1([a-z])/g, '$1$2')        // collapse 1x -> x (respect multi-digit coeffs)
+            .replace(/(^|[^0-9])1([\(\[\{])/g, '$1$2');    // collapse 1(expr) -> (expr)
+        return normalized;
     };
     
-    if (normalizeAnswer(userAnswer) === normalizeAnswer(state.currentQuestion.answer)) {
+    const normalizedUser = normalizeAnswer(userAnswer);
+    const normalizedCorrect = normalizeAnswer(state.currentQuestion.answer);
+    
+    if (normalizedUser === normalizedCorrect || derivativeExpressionsMatch(userAnswer, state.currentQuestion.answer)) {
         state.correctAnswers++;
         feedback.innerHTML = 'Correct!';
         feedback.className = 'feedback correct';
@@ -915,8 +1061,31 @@ document.addEventListener('DOMContentLoaded', function() {
     // Unit circle module
     document.getElementById('check-unit-circle').addEventListener('click', checkUnitCircleAnswer);
     document.getElementById('new-unit-circle').addEventListener('click', generateUnitCircleQuestion);
-    document.getElementById('angle-format').addEventListener('change', generateUnitCircleQuestion);
+    const angleFormatSelect = document.getElementById('angle-format');
+    if (angleFormatSelect) {
+        state.unitCircleAngleFormat = angleFormatSelect.value || 'degrees';
+        angleFormatSelect.addEventListener('change', function() {
+            const previousFormat = state.unitCircleAngleFormat || 'degrees';
+            const { minAngle, maxAngle } = getUnitCircleRangeBounds(previousFormat);
+            state.unitCircleAngleFormat = this.value;
+            setAngleRangeInputsFromDegrees(minAngle, maxAngle, this.value);
+            updateAngleRangeDisplay();
+            generateUnitCircleQuestion();
+        });
+    }
     document.getElementById('answer-format').addEventListener('change', generateUnitCircleQuestion);
+    ['unit-angle-min-input', 'unit-angle-max-input'].forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('change', () => {
+                const format = document.getElementById('angle-format').value || 'degrees';
+                const { minAngle, maxAngle } = getUnitCircleRangeBounds(format);
+                setAngleRangeInputsFromDegrees(minAngle, maxAngle, format);
+                updateAngleRangeDisplay();
+                generateUnitCircleQuestion();
+            });
+        }
+    });
     document.getElementById('show-unit-circle').addEventListener('change', function() {
         if (this.checked) {
             const angle = state.currentQuestion ? state.currentQuestion.angle : 0; // degrees
@@ -954,4 +1123,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Progress was initialized above from cookies
+    updateAngleRangeDisplay();
 });
