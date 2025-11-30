@@ -70,13 +70,13 @@ header p {
 .module-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    border-color: #ff8c42;
+    border-color: #f7971d;
 }
 
 .module-icon {
     font-size: 2.5rem;
     margin-bottom: 15px;
-    color: #ff8c42;
+    color: #f7971d;
     font-weight: bold;
 }
 
@@ -125,7 +125,7 @@ header p {
     display: block;
     font-size: 2rem;
     font-weight: 700;
-    color: #ff8c42;
+    color: #f7971d;
     margin-bottom: 5px;
 }
 
@@ -160,7 +160,7 @@ header p {
 }
 
 .back-btn {
-    background: #ff8c42;
+    background: #f7971d;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -172,7 +172,7 @@ header p {
 }
 
 .back-btn:hover {
-    background: #e06a00;
+    background: #d06b00;
     transform: translateY(-1px);
 }
 
@@ -219,11 +219,11 @@ input[type="number"], input[type="text"] {
 
 input[type="number"]:focus, input[type="text"]:focus {
     outline: none;
-    border-color: #ff8c42;
+    border-color: #f7971d;
 }
 
 button {
-    background: #ff8c42;
+    background: #f7971d;
     color: white;
     border: none;
     padding: 12px 24px;
@@ -236,7 +236,7 @@ button {
 }
 
 button:hover {
-    background: #e06a00;
+    background: #d06b00;
     transform: translateY(-2px);
 }
 
@@ -385,13 +385,13 @@ button:active {
 
 .answer-option:hover {
     background: #404040;
-    border-color: #ff8c42;
+    border-color: #f7971d;
 }
 
 .answer-option.selected {
-    background: #ff8c42;
+    background: #f7971d;
     color: white;
-    border-color: #ff8c42;
+    border-color: #f7971d;
 }
 
 /* MathJax styling */
@@ -471,7 +471,7 @@ mjx-container {
 .canvas-controls input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: #ff8c42;
+    accent-color: #f7971d;
     cursor: pointer;
 }
 
@@ -518,13 +518,13 @@ mjx-container {
 
 .operator-checkboxes label:hover {
     background: #404040;
-    border-color: #ff8c42;
+    border-color: #f7971d;
 }
 
 .operator-checkboxes input[type="checkbox"] {
     width: 14px;
     height: 14px;
-    accent-color: #ff8c42;
+    accent-color: #f7971d;
     cursor: pointer;
 }
 

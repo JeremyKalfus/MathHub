@@ -680,12 +680,12 @@ function drawUnitCircle(angleDegrees, angleFormat = 'degrees') {
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
     ctx.lineTo(endX, endY);
-    ctx.strokeStyle = '#ff8c42';
+    ctx.strokeStyle = '#f7971d';
     ctx.lineWidth = 4;
     ctx.stroke();
     
     // Draw angle label
-    ctx.fillStyle = '#ff8c42';
+    ctx.fillStyle = '#f7971d';
     ctx.font = 'bold 18px Inter';
     ctx.textAlign = 'center';
     const angleLabel = angleFormat === 'degrees' ? `${angleDegrees}°` : formatRadians(radians);
