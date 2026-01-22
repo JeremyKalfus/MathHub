@@ -6,10 +6,10 @@ A comprehensive web-based math training platform that helps students master math
 
 Practice your math abilities in 4 crucial areas:
 
-*Arithmetic Practice
-*Unit Circle Practice
-*Polynomial Factoring
-*Derivatives Practice
+- Arithmetic Practice
+- Unit Circle Practice
+- Polynomial Factoring
+- Derivatives Practice
 
 ## How to Use
 
